@@ -1,4 +1,3 @@
-use std::str::FromStr;
 use thiserror::Error;
 
 // Custom errors for Bitcoin operations
@@ -133,9 +132,13 @@ pub fn parse_cli_args(args: &[String]) -> Result<CliCommand, BitcoinError> {
     match args[0].as_str() {
         "send" => {
             if args.len() < 3 {
-                return Err(BitcoinError::ParseError("Not enough arguments for send".to_string()));
+                return Err(BitcoinError::ParseError(
+                    "Not enough arguments for send".to_string(),
+                ));
             }
-            let amount = args[1].parse::<u64>().map_err(|_| BitcoinError::ParseError("Invalid amount".to_string()))?;
+            let amount = args[1]
+                .parse::<u64>()
+                .map_err(|_| BitcoinError::ParseError("Invalid amount".to_string()))?;
             let address = args[2].clone();
             Ok(CliCommand::Send { amount, address })
         }
